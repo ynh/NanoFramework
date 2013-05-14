@@ -141,11 +141,9 @@ abstract class Model
      */
     protected static function getSelect($condition = null, $order = null, $limits = null)
     {
-        $condition=static::processCondition($condition);
+
         $query = "SELECT " . implode(', ', static::getFields()) . " FROM `" . static::getTableName() . "`";
-        $parameters = array();
-        $counter = 0;
-        $conditiondata = static::build("AND", $condition, $parameters, $counter);
+        list($conditiondata,$parameters)=static::getCondition($condition);
         if ($conditiondata != "") {
             $query .= " WHERE " . $conditiondata;
         }
@@ -161,6 +159,18 @@ abstract class Model
 
         return DB::execute($query, $parameters);
     }
+
+
+    public static function getCondition($condition)
+    {
+
+        $parameters = array();
+        $counter = 0;
+        $condition=static::processCondition($condition);
+        $conditiondata = static::build("AND", $condition, $parameters, $counter);
+        return array($conditiondata,$parameters);
+    }
+
 
     public static function processCondition($condition)
     {
@@ -180,10 +190,7 @@ abstract class Model
 
         $hasid = in_array("`id`", $fields);
         $keys = static::getKeys($hasid);
-        $update = count($keys) != 0;
-        foreach ($keys as $k) {
-            $update = $update && ($this->{$k} != NULL);
-        }
+        $update = !$this->isNew();
         if ($update) {
 
             $updates = array();
@@ -257,7 +264,17 @@ abstract class Model
         }
         return;
     }
+    public function isNew(){
 
+        $fields = static::getFields();
+        $hasid = in_array("`id`", $fields);
+        $keys = static::getKeys($hasid);
+        $update = count($keys) != 0;
+        foreach ($keys as $k) {
+            $update = $update && ($this->{$k} != NULL);
+        }
+        return !$update;
+    }
     public function resave()
     {
         if (isset($this->id)) {
@@ -271,7 +288,7 @@ abstract class Model
 
     /**
      * @param $id
-     * @return null|static
+     * @return null|self
      */
     public static function get($id)
     {
