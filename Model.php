@@ -141,6 +141,7 @@ abstract class Model
      */
     protected static function getSelect($condition = null, $order = null, $limits = null)
     {
+        $condition=static::processCondition($condition);
         $query = "SELECT " . implode(', ', static::getFields()) . " FROM `" . static::getTableName() . "`";
         $parameters = array();
         $counter = 0;
@@ -161,6 +162,10 @@ abstract class Model
         return DB::execute($query, $parameters);
     }
 
+    public static function processCondition($condition)
+    {
+        return $condition;
+    }
 
     /**
      *
