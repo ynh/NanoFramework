@@ -40,6 +40,10 @@ abstract class Model
     public function setOld($key,$value){
         $this->_olddata[$key] = $value;
     }
+
+    public function getOld($key){
+       return $this->_olddata[$key];
+    }
     /**
      *
      */
@@ -288,7 +292,7 @@ abstract class Model
 
     /**
      * @param $id
-     * @return null|self
+     * @return static
      */
     public static function get($id)
     {
@@ -319,7 +323,7 @@ abstract class Model
 
     /**
      * @param null $condition
-     * @return null|static
+     * @return static
      */
     public static function findOne($condition = null)
     {
