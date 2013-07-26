@@ -156,6 +156,9 @@ class NanoFramework
         if ($this->out) {
             @file_put_contents("App/tmp/routes.json", serialize($this->cache));
         }
+        if(isset($_GET['url'])){
+            $url=$_GET['url'];
+        }
         if ($url == null) {
             /*
              * if (isset($_GET['url'])) {
