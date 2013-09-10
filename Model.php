@@ -233,6 +233,7 @@ abstract class Model
                 if ($statement->rowCount() > 0) {
                     return;
                 }
+                return;
             }else{
                 return;
             }
