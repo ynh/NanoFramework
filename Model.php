@@ -184,7 +184,7 @@ abstract class Model
     /**
      *
      */
-    public function save()
+    public function save($force_insert=false)
     {
 
         $this->beforeSave();
@@ -195,7 +195,7 @@ abstract class Model
         $hasid = in_array("`id`", $fields);
         $keys = static::getKeys($hasid);
         $update = !$this->isNew();
-        if ($update) {
+        if ($update&&!$force_insert) {
 
             $updates = array();
             $parameters = array();
