@@ -233,7 +233,10 @@ abstract class Model
                 if ($statement->rowCount() > 0) {
                     return;
                 }
-                return;
+                $count = DB::execute("SELECT count(*) as `c` FROM `" . static::getTableName() . "` WHERE " . $conditiondata, $parameters);
+                if($count[0]['c']>0){
+                    return;
+                }
             }else{
                 return;
             }
@@ -247,7 +250,7 @@ abstract class Model
         foreach ($fields as $f) {
             $fname = substr($f, 1, -1);
             if (!isset($this->_olddata[$fname]) || $this->_olddata[$fname] != $this->{$fname}) {
-                if ($this->{$fname} != null) {
+                if (!is_null($this->{$fname})) {
                     $insertfields[] = $f;
                     $parameters[":" . $fname] = $this->{$fname};
                 }
