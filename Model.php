@@ -233,10 +233,6 @@ abstract class Model
                 if ($statement->rowCount() > 0) {
                     return;
                 }
-                $count = DB::execute("SELECT count(*) as `c` FROM `" . static::getTableName() . "` WHERE " . $conditiondata, $parameters);
-                if($count[0]['c']>0){
-                    return;
-                }
             }else{
                 return;
             }
