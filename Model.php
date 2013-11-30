@@ -161,7 +161,7 @@ abstract class Model
             $query .= " LIMIT " . $limits[0] . " , " . $limits[1];
         }
 
-        return DB::execute($query, $parameters);
+        return NanoDB::execute($query, $parameters);
     }
 
 
@@ -229,7 +229,7 @@ abstract class Model
                     $query .= " WHERE " . $conditiondata;
                 }
 
-                $statement = DB::execute($query, $parameters);
+                $statement = NanoDB::execute($query, $parameters);
                 if ($statement->rowCount() > 0) {
                     return;
                 }
@@ -260,7 +260,7 @@ abstract class Model
             $query .= ") VALUES (";
             $query .= implode(' , ', array_keys($parameters));
             $query .= ")";
-            DB::execute($query, $parameters);
+            NanoDB::execute($query, $parameters);
             if ($hasid) {
                 $this->id = $dbnew->lastInsertId();
 
@@ -350,7 +350,7 @@ abstract class Model
      */
     public function delete()
     {
-        DB::run("DELETE FROM " . static::getTableName() . " WHERE `id` = :id", array(':id' => array($this->id, PDO::PARAM_INT)));
+        NanoDB::run("DELETE FROM " . static::getTableName() . " WHERE `id` = :id", array(':id' => array($this->id, PDO::PARAM_INT)));
 
     }
 }
